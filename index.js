@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
 const app = express();
@@ -39,10 +39,25 @@ async function run() {
         })
 
         //get single toy details by id
-        app.get('toys/:id', async (req, res) => {
+        app.get('/toys/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: id };
+            const query = { _id: new ObjectId(id) };
             const result = await toysCollection.findOne(query);
+            res.send(result);
+        })
+
+        // filter toys by user email
+        app.get('/toys/user/:email', async (req,res) => {
+            const email = req.params.email;
+            const query = {email: email};
+            const result = await toysCollection.find(query).toArray();
+            res.send(result);
+        })
+
+        //add new toy to database
+        app.post('/toys',async(req,res) => {
+            const newToy = req.body;
+            const result = await toysCollection.insertOne(newToy);
             res.send(result);
         })
 
