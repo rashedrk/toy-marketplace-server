@@ -38,6 +38,14 @@ async function run() {
             res.send(result);
         })
 
+        //get toy by sub category
+        app.get('/toys/subCategory/:subCategory', async (req,res) => {
+            const subCategory = req.params.subCategory;
+            const query = {subCategory: subCategory};
+            const result = await toysCollection.find(query).toArray();
+            res.send(result);
+        })
+
         //get single toy details by id
         app.get('/toys/:id', async (req, res) => {
             const id = req.params.id;
