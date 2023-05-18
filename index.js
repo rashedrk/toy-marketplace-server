@@ -42,7 +42,8 @@ async function run() {
         app.get('/toys/subCategory/:subCategory', async (req,res) => {
             const subCategory = req.params.subCategory;
             const query = {subCategory: subCategory};
-            const result = await toysCollection.find(query).toArray();
+            const options = {projection: { _id: 1, toyName: 1, price: 1, photo: 1, rating: 1 }}
+            const result = await toysCollection.find(query,options).toArray();
             res.send(result);
         })
 
