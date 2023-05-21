@@ -63,6 +63,19 @@ async function run() {
             res.send(result);
         })
 
+        //search toys by category and name
+        app.get('/toys/search/:text',async(req,res) => {
+            const text = req.params.text;
+            const search = {
+                $or : [
+                    {toyName: { $regex: text, $options: "i" }},
+                    {subCategory: { $regex: text, $options: "i" }}
+                ]
+            };
+            const result = await toysCollection.find(search).toArray();
+            res.send(result)
+        })
+
         //add new toy to database
         app.post('/toys',async(req,res) => {
             const newToy = req.body;
